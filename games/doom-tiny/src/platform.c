@@ -34,12 +34,12 @@ const struct st7789_config lcd_config = {
     .gpio_bl  = 24,
 };
 
-#define WINDOW_WIDTH 128
+#define WINDOW_WIDTH 132
 #define WINDOW_HEIGHT 128
 
 static uint16_t elapsed_time = 0;
 
-static uint16_t frame[WINDOW_HEIGHT][WINDOW_WIDTH];
+static uint16_t frame[WINDOW_WIDTH*WINDOW_HEIGHT];
 
 static bool timer_callback( repeating_timer_t *rt )
 {
@@ -101,7 +101,7 @@ void platform_init(void)
  */
 void platform_draw_start(void)
 {
-    
+    st7789_set_cursor(0, 0);
 }
 
 /**
@@ -110,10 +110,7 @@ void platform_draw_start(void)
  */
 void platform_draw_stop(void)
 {
-    for (int y=0; y<WINDOW_HEIGHT; y++) {
-        st7789_set_cursor(0, y);
-        st7789_write(frame[y], WINDOW_WIDTH  * 2);
-    }
+    st7789_write(frame, WINDOW_WIDTH * WINDOW_HEIGHT * 2);
 }
 
 /**
@@ -128,10 +125,8 @@ void platform_draw_pixel(uint8_t x, uint8_t y, bool color)
     uint8_t xi = SCREEN_HEIGHT-y;
     uint8_t yi = x;
 
-    // st7789_set_cursor(xi, yi);
-    // st7789_put(color ? 0xFFFF : 0x0000);
-    
-    frame[yi][xi] = color ? 0xFFFF : 0x0000;
+    uint16_t index = xi + (WINDOW_WIDTH * yi);
+    frame[index] = color ? 0xFFFF : 0x0000;
 }
 
 /**
