@@ -7,7 +7,7 @@ target_compile_options(hello_keyboard PRIVATE -Wall)
 target_link_libraries(hello_keyboard
 	pico_stdlib
 	pico_util
-	pico_st7789
+	libst7789
 )
 
 pico_enable_stdio_usb(hello_keyboard 1) # enable usb output

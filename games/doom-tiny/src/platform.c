@@ -11,7 +11,7 @@
 #include "input.h"
 
 #include "pico/stdlib.h"
-#include "pico/st7789.h"
+#include "st7789.h"
 
 #define KEY_LEFT 15
 #define KEY_RIGHT 26
@@ -45,13 +45,15 @@ const struct st7789_config lcd_config = {
 #define WINDOW_WIDTH 132
 #define WINDOW_HEIGHT 128
 
+#define TIMER_MS 6
+
 static uint16_t elapsed_time = 0;
 
 static uint16_t frame[WINDOW_WIDTH*WINDOW_HEIGHT];
 
 static bool timer_callback( repeating_timer_t *rt )
 {
-    elapsed_time += 1;
+    elapsed_time += TIMER_MS;
 
     return true;
 }
@@ -93,7 +95,7 @@ void platform_init(void)
     stdio_init_all();
     
     static repeating_timer_t timer;
-    add_repeating_timer_ms( 1, &timer_callback, NULL, &timer );
+    add_repeating_timer_ms(TIMER_MS, &timer_callback, NULL, &timer );
 
     // initialize the keyboard
     keyboard_init();
@@ -118,7 +120,7 @@ void platform_draw_start(void)
  */
 void platform_draw_stop(void)
 {
-    st7789_write(frame, WINDOW_WIDTH * WINDOW_HEIGHT * 2);
+    st7789_dma_write(frame, WINDOW_WIDTH * WINDOW_HEIGHT * 2);
 }
 
 /**

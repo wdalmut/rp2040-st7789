@@ -17,7 +17,7 @@ project(rp2040-doom)
 pico_sdk_init()
 add_compile_options(-Wall)
 
-add_subdirectory(libs/st7789)
+add_subdirectory(libs/lib7789)
 
 add_subdirectory(tests)
 add_subdirectory(games)

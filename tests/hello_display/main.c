@@ -1,5 +1,5 @@
 #include "pico/stdlib.h"
-#include "pico/st7789.h"
+#include "st7789.h"
 
 // lcd configuration
 const struct st7789_config lcd_config = {

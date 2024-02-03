@@ -23,7 +23,7 @@ target_compile_options(doom-pico PRIVATE -Wall)
 target_link_libraries(doom-pico
 	pico_stdlib
 	pico_util
-	pico_st7789
+	libst7789
 )
 
 pico_enable_stdio_usb(doom-pico 1) # enable usb output

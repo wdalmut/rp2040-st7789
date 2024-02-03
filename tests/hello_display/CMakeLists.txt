@@ -7,7 +7,7 @@ target_compile_options(hello_display PRIVATE -Wall)
 target_link_libraries(hello_display
 	pico_stdlib
 	pico_util
-	pico_st7789
+	libst7789
 )
 
 # create map/bin/hex file etc.
