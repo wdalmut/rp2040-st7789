@@ -34,6 +34,14 @@ const struct st7789_config lcd_config = {
     .gpio_bl  = 24,
 };
 
+/**
+ * The ST7735S is a 132*162 pixel LCD controller, but the pixel of the
+ * 1.44-inch LCD HAT is 128*128. So we have made some processing on the display:
+ * the horizontal direction starts from the second pixel to guarantee the
+ * location of RAM in the LCD is consistent with the actual location at the same
+ *  time.
+ */
+// fix the ST7735S screen width dimension (from position 128 to 131 are useless)
 #define WINDOW_WIDTH 132
 #define WINDOW_HEIGHT 128
 
