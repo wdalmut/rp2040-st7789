@@ -1,0 +1,9 @@
+[submodule "pico-sdk"]
+	path = pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
+[submodule "libs/st7789"]
+	path = libs/st7789
+	url = https://github.com/ArmDeveloperEcosystem/st7789-library-for-pico.git
+[submodule "games/doom-pico"]
+	path = games/doom-pico
+	url = git@github.com:wdalmut/doom-pico.git
