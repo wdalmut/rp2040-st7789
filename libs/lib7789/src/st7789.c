@@ -259,3 +259,28 @@ void st7789_vertical_scroll(uint16_t row)
     // VSCSAD (37h): Vertical Scroll Start Address of RAM 
     st7789_cmd(0x37, data, sizeof(data));
 }
+
+void st7789_set_rotation(uint8_t m)
+{
+    uint8_t madctl = 0;
+
+    uint8_t rotation = m & 3; // can't be higher than 3
+
+    switch (rotation)
+    {
+    case 0:
+        madctl = ST77XX_MADCTL_MX | ST77XX_MADCTL_MY | ST77XX_MADCTL_RGB;
+        break;
+    case 1:
+        madctl = ST77XX_MADCTL_MY | ST77XX_MADCTL_MV | ST77XX_MADCTL_RGB;
+        break;
+    case 2:
+        madctl = ST77XX_MADCTL_RGB;
+        break;
+    case 3:
+        madctl = ST77XX_MADCTL_MX | ST77XX_MADCTL_MV | ST77XX_MADCTL_RGB;
+        break;
+    }
+
+    st7789_cmd(0x36, &madctl, 1);
+}

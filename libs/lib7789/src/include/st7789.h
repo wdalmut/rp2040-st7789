@@ -10,6 +10,14 @@
 
 #include "hardware/spi.h"
 
+#define ST77XX_MADCTL 0x36
+
+#define ST77XX_MADCTL_MY 0x80
+#define ST77XX_MADCTL_MX 0x40
+#define ST77XX_MADCTL_MV 0x20
+#define ST77XX_MADCTL_ML 0x10
+#define ST77XX_MADCTL_RGB 0x00
+
 struct st7789_config {
     spi_inst_t* spi;
     uint gpio_din;
@@ -27,5 +35,6 @@ void st7789_put(uint16_t pixel);
 void st7789_fill(uint16_t pixel);
 void st7789_set_cursor(uint16_t x, uint16_t y);
 void st7789_vertical_scroll(uint16_t row);
+void st7789_set_rotation(uint8_t);
 
 #endif
