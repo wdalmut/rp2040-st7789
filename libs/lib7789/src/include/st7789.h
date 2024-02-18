@@ -28,13 +28,17 @@ struct st7789_config {
     uint gpio_bl;
 };
 
+typedef void (*st7789_dma_finish_callback_t)(void);
+
 void st7789_init(const struct st7789_config* config, uint16_t width, uint16_t height);
-void st7789_dma_write(const void *data, size_t len);
 void st7789_write(const void* data, size_t len);
 void st7789_put(uint16_t pixel);
 void st7789_fill(uint16_t pixel);
 void st7789_set_cursor(uint16_t x, uint16_t y);
 void st7789_vertical_scroll(uint16_t row);
 void st7789_set_rotation(uint8_t);
+
+void st7789_dma_write(const void *data, size_t len);
+void st7789_set_dma_irq_handler(uint num, st7789_dma_finish_callback_t);
 
 #endif

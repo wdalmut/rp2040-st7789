@@ -1,2 +1,3 @@
 add_subdirectory(hello_display)
 add_subdirectory(hello_keyboard)
+add_subdirectory(hello_dma)

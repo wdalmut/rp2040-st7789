@@ -9,6 +9,7 @@
 
 #include "hardware/dma.h"
 #include "hardware/gpio.h"
+#include "hardware/irq.h"
 
 #include "st7789.h"
 
@@ -17,8 +18,27 @@ static uint16_t st7789_width;
 static uint16_t st7789_height;
 static bool st7789_data_mode = false;
 
+static int dma_irq;
 static uint dma_tx;
 static dma_channel_config c;
+
+static st7789_dma_finish_callback_t f_dma_finish_callback;
+
+static void _st7789_dma_finish_callback(void)
+{
+    if (dma_irq == DMA_IRQ_0) {
+        dma_channel_set_irq0_enabled(dma_tx, true);
+        dma_hw->ints0 = 1u << dma_tx;
+    } else if (dma_irq == DMA_IRQ_1) {
+        dma_channel_set_irq0_enabled(dma_tx, true);
+        dma_hw->ints1 = 1u << dma_tx;
+    } else {
+        return;
+    }
+    
+
+    f_dma_finish_callback();
+}
 
 static void st7789_cmd(uint8_t cmd, const uint8_t* data, size_t len)
 {
@@ -164,6 +184,24 @@ void st7789_init(const struct st7789_config* config, uint16_t width, uint16_t he
     c = dma_channel_get_default_config(dma_tx);  // Default configs
     channel_config_set_transfer_data_size(&c, DMA_SIZE_16);          // 16-bit txfers
     channel_config_set_dreq(&c, spi_get_dreq(st7789_cfg.spi, true));
+}
+
+void st7789_set_dma_irq_handler(uint num, st7789_dma_finish_callback_t cb)
+{
+    if (num == DMA_IRQ_0) {
+        dma_channel_set_irq0_enabled(dma_tx, true);
+    } else if (num == DMA_IRQ_1) {
+        dma_channel_set_irq1_enabled(dma_tx, true);
+    } else {
+        return;
+    }
+    
+    dma_irq = num;
+
+    f_dma_finish_callback = cb;
+
+    irq_set_exclusive_handler(num, _st7789_dma_finish_callback);
+    irq_set_enabled(num, true);
 }
 
 void st7789_ramwr()
